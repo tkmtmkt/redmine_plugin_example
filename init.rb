@@ -1,3 +1,5 @@
+Project.send(:include, RedminePluginExample::ProjectPatch)
+
 Redmine::Plugin.register :redmine_plugin_example do
   name 'Redmine Plugin Example plugin'
   author 'Author name'
