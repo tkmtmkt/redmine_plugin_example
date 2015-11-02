@@ -17,5 +17,5 @@ Redmine::Plugin.register :redmine_plugin_example do
     caption: :label_details, before: :issues, param: :project_id
 
   menu :project_menu, :detail, { controller: :details, action: :show },
-    caption: :label_details, before: :issues, param: :project_id
+    caption: :label_details, before: :activity, param: :project_id
 end
