@@ -32,5 +32,12 @@ namespace :redmine do
     rescue => e
       puts 'Error: ' + e.message
     end
+
+    59.times.each_with_index do |i|
+      project = Project.create(
+        name: "サンプル#{i + 1}",
+        identifier: "sample#{i + 1}"
+      )
+    end
   end
 end
