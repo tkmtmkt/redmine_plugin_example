@@ -1,0 +1,30 @@
+= form_tag({}) do
+  = hidden_field_tag 'back_url', url_for(params), id: nil
+  .autoscroll
+    table class="list #{sort_css_classes}"
+      thead
+        tr
+          th.checkbox.hide-when-print
+            = link_to image_tag('toggle_check.png'), {},
+                                onclick: 'toggleIssuesSelection(this); return false;',
+                                title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}"
+          - query.inline_columns.each do |column|
+            = column_header(column)
+      tbody
+        - grouped_project_list(projects, @query, @project_count_by_group) do |project, level, group_name, group_count|
+          - if group_name
+            - reset_cycle
+            tr.group.open
+              td colspan="#{query.inline_columns.size + 2}"
+                span.expander onclick="toggleRowGroup(this);" &nbsp;
+                = group_name
+                span.count = group_count
+                = link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}",
+                                   "toggleAllRowGroups(this)", class: 'toggle-all')
+          tr id="project-#{project.id}" class="hascontextmenu #{cycle('odd', 'even')} #{project.css_classes} #{level > 0 ? "idnt idnt-#{level}" : nil}"
+            td class="checkbox hide-when-print" = check_box_tag("ids[]", project.id, false, id: nil)
+            = raw query.inline_columns.map { |column| "<td class=\"#{column.css_classes}\">#{column_content(column, project)}</td>" }.join
+          - @query.block_columns.each do |column|
+            - if (text = column_content(column, project)) && text.present?
+              tr class="#{current_cycle}"
+                td colspan="#{@query.inline_columns.size + 1}" class="#{column.css_classes}" = text
