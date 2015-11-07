@@ -1,20 +1,33 @@
 namespace :redmine do
-  desc 'initialize application'
-  task setup: :environment do
-    #ユーザー
-    User.find(1).update(firstname: '管理者', lastname: 'システム')
+  namespace :example do
+    desc 'initialize application'
+    task setup: :environment do
+      ####################
+      # 管理 ＞ ユーザー
+      admin = User.find(1)
+      admin.update(firstname: '管理者', lastname: 'システム')
 
-    # 設定 ＞ 全般
-    Setting.text_formatting = 'markdown'
+      ####################
+      # 管理 ＞ 設定
+      # 全般
+      Setting.text_formatting = 'markdown'
 
-    # 設定 ＞ 表示
-    Setting.default_language = 'ja'
-    Setting.user_format = :lastname_firstname
+      # 表示
+      Setting.default_language = 'ja'
+      Setting.user_format = :lastname_firstname
 
-    # 設定 ＞ プロジェクト
-    Setting.default_projects_modules = %w(issue_tracking news documents files wiki calendar gantt redmine_plugin_example)
+      # 認証
+      Setting.login_required = '0'
+      Setting.self_registration = '0'
+      Setting.rest_api_enabled = '1'
 
-    # 設定 ＞ リポジトリ
-    Setting.enabled_scm = %w(Subversion Git)
+      # プロジェクト
+      Setting.default_projects_public = '0'
+      Setting.default_projects_modules =
+        %w(issue_tracking news documents files wiki calendar gantt redmine_plugin_example)
+
+      # リポジトリ
+      Setting.enabled_scm = %w(Subversion Git)
+    end
   end
 end
