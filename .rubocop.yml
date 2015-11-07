@@ -1,0 +1,39 @@
+AllCops:
+  DisplayCopNames: true
+  Exclude:
+    - "bin/*"
+    - "db/schema.rb"
+    - "db/migrate/*"
+    - "spec/**/*"
+    - "vendor/**/*" # rubocop config/default.yml
+  RunRailsCops: true
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockNesting:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
