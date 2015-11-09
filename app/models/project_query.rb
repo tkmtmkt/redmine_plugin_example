@@ -1,12 +1,10 @@
 class ProjectQuery < Query
-
   self.queried_class = Project
 
   self.available_columns = [
     QueryColumn.new(:id, sortable: "#{Project.table_name}.name", default_order: 'desc', caption: '#', frozen: true),
     QueryColumn.new(:project, sortable: "#{Project.table_name}.name", groupable: true),
-    QueryColumn.new(:year, sortable: "#{Detail.table_name}.year", groupable: true),
-
+    QueryColumn.new(:year, sortable: "#{Detail.table_name}.year", groupable: true)
   ]
 
   def initialize(attributes = nil, *args)
@@ -16,7 +14,7 @@ class ProjectQuery < Query
   end
 
   def initialize_available_filters
-    add_available_filter "year", type: :text
+    add_available_filter 'year', type: :text
 
     principals = []
     if project
@@ -24,9 +22,11 @@ class ProjectQuery < Query
       unless project.leaf?
         subprojects = project.descendants.visible.to_a
         if subprojects.any?
-          add_available_filter "subproject_id",
-            :type => :list_subprojects,
-            :values => subprojects.collect{|s| [s.name, s.id.to_s] }
+          add_available_filter(
+            'subproject_id',
+            type: :list_subprojects,
+            values: subprojects.collect { |s| [s.name, s.id.to_s] }
+          )
           principals += Principal.member_of(subprojects).visible
         end
       end
@@ -37,23 +37,27 @@ class ProjectQuery < Query
         # project filter
         project_values = []
         if User.current.logged? && User.current.memberships.any?
-          project_values << ["<< #{l(:label_my_projects).downcase} >>", "mine"]
+          project_values << ["<< #{l(:label_my_projects).downcase} >>", 'mine']
         end
         project_values += all_projects_values
-        add_available_filter("project_id",
-          :type => :list, :values => project_values
+        add_available_filter(
+          'project_id',
+          type: :list,
+          values: project_values
         ) unless project_values.empty?
       end
     end
     principals.uniq!
     principals.sort!
-    users = principals.select {|p| p.is_a?(User)}
+    users = principals.select { |p| p.is_a?(User) }
 
     users_values = []
-    users_values << ["<< #{l(:label_me)} >>", "me"] if User.current.logged?
-    users_values += users.collect{|s| [s.name, s.id.to_s] }
-    add_available_filter("user_id",
-      :type => :list_optional, :values => users_values
+    users_values << ["<< #{l(:label_me)} >>", 'me'] if User.current.logged?
+    users_values += users.collect { |s| [s.name, s.id.to_s] }
+    add_available_filter(
+      'user_id',
+      type: :list_optional,
+      values: users_values
     ) unless users_values.empty?
   end
 

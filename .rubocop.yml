@@ -11,8 +11,14 @@ AllCops:
 Style/AsciiComments:
   Enabled: false
 
+Style/Documentation:
+  Enabled: false
+
 Style/DotPosition:
   EnforcedStyle: trailing
+
+Lint/UnusedMethodArgument:
+  Enabled: false
 
 Metrics/AbcSize:
   Enabled: false

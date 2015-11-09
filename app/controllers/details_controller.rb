@@ -2,8 +2,8 @@
 class DetailsController < ApplicationController
   unloadable
   menu_item :detail, only: [:show, :edit, :update]
-  before_filter :authorize_global, except: [:show, :edit, :update]
-  before_filter :find_project_by_project_id, :authorize, only: [:show, :edit, :update]
+  before_action :authorize_global, except: [:show, :edit, :update]
+  before_action :find_project_by_project_id, :authorize, only: [:show, :edit, :update]
 
   helper :queries
   include QueriesHelper
@@ -13,7 +13,7 @@ class DetailsController < ApplicationController
   def index
     @query = ProjectQuery.new(name: '_')
     @query.build_from_params(params)
-    sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
+    sort_init(@query.sort_criteria.empty? ? [%w(id desc)] : @query.sort_criteria)
     sort_update(@query.sortable_columns)
     @query.sort_criteria = sort_criteria.to_a
 
@@ -22,14 +22,14 @@ class DetailsController < ApplicationController
       @project_count = @query.project_count
       @project_pages = Paginator.new @project_count, @limit, params['page']
       @offset ||= @project_pages.offset
-      @projects = @query.projects( include: [:detail],
-                                   order: sort_clause,
-                                   offset: @offset,
-                                   limit: @limit)
+      @projects = @query.projects(include: [:detail],
+                                  order: sort_clause,
+                                  offset: @offset,
+                                  limit: @limit)
       @project_count_by_group = @query.project_count_by_group
 
       respond_to do |format|
-        format.html { render :layout => !request.xhr? }
+        format.html { render layout: !request.xhr? }
       end
     end
   rescue ActiveRecord::RecordNotFound

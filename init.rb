@@ -8,7 +8,6 @@ Redmine::Plugin.register :redmine_plugin_example do
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
 
-
   permission :manage_details, { details: [:index] }, require: :member
 
   project_module :redmine_plugin_example do
@@ -16,8 +15,8 @@ Redmine::Plugin.register :redmine_plugin_example do
   end
 
   menu :application_menu, :details, { controller: :details, action: :index },
-    caption: :label_details, before: :issues, param: :project_id
+       caption: :label_details, before: :issues, param: :project_id
 
   menu :project_menu, :detail, { controller: :details, action: :show },
-    caption: :label_details, before: :activity, param: :project_id
+       caption: :label_details, before: :activity, param: :project_id
 end
