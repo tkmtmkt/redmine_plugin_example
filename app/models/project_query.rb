@@ -80,6 +80,6 @@ class ProjectQuery < Query
   def projects(options = {})
     Project.all
   rescue ::ActiveRecord::StatementInvalit => e
-    raise StatementInvalid.new(e.message)
+    raise StatementInvalid, e.message
   end
 end
